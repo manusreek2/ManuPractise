@@ -24,11 +24,17 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh './gradlew clean check'
+                sh './gradlew clean build'
             }
         }
 
-        stage('Test Results') {
+        stage('Test') {
+            steps {
+                sh './gradlew test'
+            }
+        }
+
+        stage('Publish Results') {
             steps {
                 junit allowEmptyResults: true, testResults: '**/build/test-results/test/*.xml'
             }
@@ -36,16 +42,14 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Cleaning up...'
-        }
         success {
-            echo 'Build succeeded!'
+            echo '✅ Build completed successfully!'
         }
         failure {
-            echo 'Build failed. Check console output for details.'
+            echo '❌ Build failed. Please check the console output.'
+        }
+        always {
+            echo '🧹 Cleaning up workspace...'
         }
     }
-}
-
 }
