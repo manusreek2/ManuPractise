@@ -1,18 +1,15 @@
 pipeline {
-    agent {
-        docker {
-            image 'gradle:8.4-jdk17'
-            args '-v $HOME/.gradle:/home/gradle/.gradle'
-        }
+    agent any
+
+    environment {
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        GRADLE_OPTS = "-Dorg.gradle.daemon=false"
     }
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         timestamps()
-    }
-
-    environment {
-        GRADLE_OPTS = "-Dorg.gradle.daemon=false"
     }
 
     stages {
@@ -40,7 +37,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo '✅ Build completed successfully!'
