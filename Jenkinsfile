@@ -12,11 +12,5 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Archive') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
     }
 }
